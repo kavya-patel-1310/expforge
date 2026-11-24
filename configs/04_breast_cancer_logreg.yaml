@@ -1,0 +1,6 @@
+experiment: breast-cancer-diagnosis
+name: logreg-l2
+dataset: {name: breast_cancer, seed: 42}
+model: {name: logistic_regression, params: {C: 0.5}}
+training: {scale: true, cv_folds: 5}
+tags: {owner: ml-team, stage: baseline}

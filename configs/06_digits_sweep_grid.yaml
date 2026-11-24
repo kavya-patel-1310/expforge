@@ -1,0 +1,13 @@
+# Grid search over SVM C x gamma on handwritten digits (10 classes)
+experiment: digits-recognition
+dataset: {name: digits, seed: 0}
+model: {name: svm, params: {kernel: rbf}}
+training: {scale: true}
+sweep:
+  name: svm-grid
+  strategy: grid
+  objective: val_accuracy
+  direction: maximize
+  search_space:
+    model.params.C: [0.5, 2, 8]
+    model.params.gamma: [scale, 0.005, 0.02]

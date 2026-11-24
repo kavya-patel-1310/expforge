@@ -1,0 +1,10 @@
+# Baseline: random forest on breast cancer, 5-fold CV, auto-registered to Staging
+experiment: breast-cancer-diagnosis
+name: random-forest-baseline
+dataset: {name: breast_cancer, test_size: 0.2, val_size: 0.2, seed: 42}
+model:
+  name: random_forest
+  params: {n_estimators: 300, max_depth: 8}
+training: {scale: false, cv_folds: 5}
+tags: {owner: ml-team, stage: baseline}
+register: {name: cancer-classifier, stage: Staging}

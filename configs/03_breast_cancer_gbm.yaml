@@ -1,0 +1,10 @@
+# Gradient boosting: per-iteration train/val curves recovered from staged predictions
+experiment: breast-cancer-diagnosis
+name: gbm-lr0.05
+dataset: {name: breast_cancer, seed: 42}
+model:
+  name: gradient_boosting
+  params: {n_estimators: 250, learning_rate: 0.05, max_depth: 3, subsample: 0.8}
+training: {scale: false}
+tags: {owner: ml-team, stage: candidate}
+register: {name: cancer-classifier, stage: Production}

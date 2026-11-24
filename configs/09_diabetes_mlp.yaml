@@ -1,0 +1,5 @@
+experiment: diabetes-progression
+name: mlp-regressor
+dataset: {name: diabetes, seed: 1}
+model: {name: mlp, params: {hidden_layer_sizes: [32, 16], learning_rate_init: 0.01, alpha: 0.01}}
+training: {scale: true, epochs: 200, early_stopping_patience: 15}

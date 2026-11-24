@@ -1,0 +1,7 @@
+# Regression: residual analysis, RMSE/MAE/R2 tracking
+experiment: diabetes-progression
+name: hist-gbm
+dataset: {name: diabetes, seed: 1}
+model: {name: hist_gradient_boosting, params: {max_iter: 150, learning_rate: 0.05, max_depth: 3}}
+training: {scale: false, cv_folds: 5}
+register: {name: diabetes-regressor, stage: Staging}

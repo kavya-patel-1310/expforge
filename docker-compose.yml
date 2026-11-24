@@ -1,0 +1,30 @@
+# Production-style stack: ExpForge API/dashboard backed by Postgres, artifacts on a named volume.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: expforge
+      POSTGRES_PASSWORD: expforge
+      POSTGRES_DB: expforge
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U expforge"]
+      interval: 5s
+      retries: 10
+
+  expforge:
+    build: .
+    depends_on:
+      db: { condition: service_healthy }
+    environment:
+      EXPFORGE_DB_URL: postgresql+psycopg://expforge:expforge@db:5432/expforge
+      EXPFORGE_ARTIFACTS: /data/artifacts
+    volumes: [artifacts:/data]
+    ports: ["8000:8000"]
+    command: >
+      sh -c "pip install --quiet 'psycopg[binary]' 2>/dev/null || true;
+             expforge server --host 0.0.0.0 --port 8000"
+
+volumes:
+  pgdata:
+  artifacts:

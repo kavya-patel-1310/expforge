@@ -1,0 +1,17 @@
+# Random search over gradient boosting hyperparameters (multiclass)
+experiment: wine-cultivar
+dataset: {name: wine, seed: 7}
+model: {name: gradient_boosting}
+training: {scale: false}
+sweep:
+  name: gbm-random-search
+  strategy: random
+  n_trials: 12
+  objective: val_f1_macro
+  direction: maximize
+  search_space:
+    model.params.n_estimators: [50, 100, 200]
+    model.params.learning_rate: {type: loguniform, low: 0.01, high: 0.5}
+    model.params.max_depth: {type: int, low: 1, high: 5}
+    model.params.subsample: {type: uniform, low: 0.5, high: 1.0}
+register: {name: wine-classifier, stage: Production}

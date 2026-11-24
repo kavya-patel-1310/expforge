@@ -1,0 +1,33 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "${{ matrix.python-version }}", cache: pip }
+      - run: pip install -e ".[dev]"
+      - run: ruff check expforge tests examples
+      - run: pytest --cov=expforge --cov-report=xml
+      - name: Smoke-test CLI
+        run: |
+          expforge catalog
+          EXPFORGE_HOME=$RUNNER_TEMP/ef expforge demo --quick
+          EXPFORGE_HOME=$RUNNER_TEMP/ef expforge runs
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t expforge:ci .
+      - run: |
+          docker run -d -p 8000:8000 --name ef expforge:ci
+          for i in $(seq 1 20); do curl -sf localhost:8000/api/health && exit 0; sleep 1; done; docker logs ef; exit 1

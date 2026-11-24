@@ -1,0 +1,5 @@
+experiment: diabetes-progression
+name: ridge-baseline
+dataset: {name: diabetes, seed: 1}
+model: {name: ridge, params: {alpha: 0.5}}
+training: {scale: true, cv_folds: 5}
